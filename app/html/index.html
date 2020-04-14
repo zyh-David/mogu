@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>蘑菇网-你的专业导购</title>
+    <meta name="Keywords" content="蘑菇网,女装,时尚潮流,网上购物" />
+    <meta name="Description" content="蘑菇网-成立于2016年底，横空而降的专业女装导购网站，您的信赖，是我们从事的唯一标准。" />
+    <meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+    <!-- Mobile Devices Support @begin -->
+    <meta content="application/xhtml+xml;charset=UTF-8" http-equiv="Content-Type">
+    <!-- Mobile Devices Support @end -->
+    <link href="../css/index.css" rel="stylesheet" />
+    <link href="../css/common.css" rel="stylesheet" />
+    <link href="../css/swiper-3.4.0.min.css" rel="stylesheet" />
+    <script src="../script/jquery-1.9.1.min.js"></script>
+    <script src="../script/main.js"></script>
+    <script src="../script/jquery.rotate.min.js"></script>
+    <script src="../script/jQuery-jcMarquee.js"></script>
+    <script src="../script/swiper-3.4.0.min.js"></script>
+    <script src="../script/settings.js"></script>
+    <script src="../script/rpc.js"></script>
+    <script src="../script/api.js"></script>
+    <script src="../script/vue.js"></script>
+    <script src="../script/axios.js"></script>
+</head>
+
+<body>
+<div class="main" id="app">
+    <!--头部-->
+    <div class="header" id="bktop">
+      <div class="logo"><a href=""><img :src="site_config.logo" /></a></div>
+      <div class="banner">
+          <div class="close"><img id="img1" src="../image/banner01.gif" /></div>
+          <div class="open hide"><img id="img2" src="../image/banner02.gif" /></div>
+          <ul class="xla">
+              <li :key="key" v-for="nav,key in nav_list">
+                <a class="dianj dj1"><font>{{nav.name}}</font><img id="ig1" src="../image/xiala.gif" /></a>
+                <div class="zilan" :key="key" v-for="son,key in nav.children_list">
+                  <a @click="jump(son.link)">{{son.name}}</a>
+                </div>
+              </li>
+           </ul>
+      </div>
+      <div class="clearBoth"></div>
+    </div>
+      <!--滚动图-->
+      <div id="main">
+        <div class="home-device">
+            <a class="arrow-left" href="#"></a>
+            <a class="arrow-right" href="#"></a>
+            <div class="swiper-main">
+                <div class="swiper-container swiper1">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide" :key="key" v-for="banner,key in banner_list"><a :href="banner.link"><img :src="banner.image_url" width="100%"></a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="dian"><div class="pagination pagination1"></div></div>
+      </div>
+    <div class="news">
+        <!--滚动公告-->
+        <div class="gongao">
+            <div class="laba"><img src="../image/gongao.gif" /></div>
+            <div class="wenzi" id="mrq">
+                <div id="Marquee_x">
+                    <ul>
+                        <li>
+                            <div>{{site_config.phrase}}</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="clearBoth"></div>
+        </div>
+        <!--潮流新品-->
+        <h2 class="floor-title">今日"心"品</h2>
+        <div class="case_list">
+            <div class="case_list_body case_list_body2">
+                <ul>
+                    <li :class="key%2==0?'yyu':'casela'" v-for="goods,key in goods_list">
+                        <a href="">
+                            <div class="case_list_body_pic">
+                                <img :src="goods.image_url">
+                            </div>
+                        </a>
+                        <div class="case_list_info">
+                          <p class="cast_list_tit"><a :href="goods.id">{{goods.title}}</a></p>
+                      </div>
+                    </li>
+                    <div class="clearBoth"></div>
+                </ul>
+            </div>
+        </div>
+        <!--资讯列表-->
+        <h2 class="floor-title">潮流资讯</h2>
+        <div class="newslist">
+              <div class="qtao" v-for="news in news_list">
+                <div class="mg">
+                    <div class="mgl"><img :src="news.image_url" width="100%" /></div>
+                    <div class="mgr">
+                        <h3>{{news.title}}</h3>
+                        <div class="what">
+                            <div class="time">
+                                <div class="tub"><img src="../image/time.gif" /></div>
+                                <div class="shij">{{news.created_time|format}}</div>
+                                <div class="clearBoth"></div>
+                            </div>
+                            <div class="time hit">
+                                <div class="tub"><img src="../image/hit.gif" /></div>
+                                <div class="shij">{{news.read_count}}</div>
+                                <div class="clearBoth"></div>
+                            </div>
+                            <div class="clearBoth"></div>
+                        </div>
+                        <div class="jianj">{{news.descript}}</div>
+                        <div class="ydu">
+                            <div class="anniu"><a href=""><img src="../image/ydu.gif" /></a></div>
+                            <div class="clearBoth"></div>
+                        </div>
+                    </div>
+                    <div class="clearBoth"></div>
+                </div>
+              </div>
+        </div>
+    </div>
+    <!--底部-->
+    <div class="bottom">
+        <div class="bottom-top">
+            <div class="linker">
+                <div class="liuy">
+                    <a href="">
+                        <div class="tubiao"><img src="../image/liuy.gif" /></div>
+                        <div class="wenzi">在线留言</div>
+                        <div class="clearBoth"></div>
+                    </a>
+                </div>
+                <div class="clearBoth"></div>
+            </div>
+        </div>
+        <div class="bottom-bot">{{site_config.copyright}}</div>
+    </div>
+  </div>
+<script>
+
+  var vm = new Vue({
+    el:"#app",
+    data:{
+      site_config: {},
+      nav_list: [],
+      banner_list: [],
+      goods_list: [],
+      news_list: [],
+    },
+    created(){
+      this.get_site_config();
+      this.get_nav_list();
+      this.get_banner_list();
+      this.get_goods_list();
+      this.get_news_list();
+    },
+    filters:{
+      format(date_str){
+        date_obj = new Date(date_str);
+        let year = date_obj.getFullYear();
+        let month = date_obj.getMonth()+1;
+        let date = date_obj.getDate();
+        month = month<10?'0'+month:month;
+        date = date<10?'0'+date:date;
+        return `${year}-${month}-${date}`;
+      }
+    },
+    methods:{
+      jump(link,params){
+          api.openWin({
+              name: 'page1',
+              url: link,
+              pageParam: params
+          });
+      },
+      get_site_config(){
+        // 获取站点配置
+        rpc(settings.API,"Home.site_config",{},result=>{
+          this.site_config = result;
+
+          $('#Marquee_x').jcMarquee({ 'marquee':'x','margin_right':'300px','speed':20 });
+
+        });
+      },
+      get_nav_list(){
+        rpc(settings.API,"Home.nav",{},result=>{
+          this.nav_list = result;
+        });
+      },
+      get_banner_list(){
+        rpc(settings.API,"Home.banner",{},result=>{
+          this.banner_list = result;
+
+          // 在获取了数据以后，再进行初始化广告轮播特效
+          setTimeout(function(){
+            var swiper = new Swiper('.swiper1', {
+                pagination : '.pagination1',
+                loop: true,
+                paginationClickable: true,
+                autoplay : 5000,
+                grabCursor: true,
+                autoHeight: true,
+            });
+          },1);
+
+        });
+      },
+      get_goods_list(){
+        rpc(settings.API,"Goods.home_goods",{},result=>{
+          this.goods_list = result;
+        });
+      },
+      get_news_list(){
+        rpc(settings.API,"News.home_news",{},result=>{
+          this.news_list = result;
+        });
+      },
+    }
+  });
+
+</script>
+</body>
+</html>

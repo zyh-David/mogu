@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>2016冬季新款韩版长款过膝韩国宽松纯色棉衣-蘑菇网-你的专业导购</title>
+  <meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+  <!-- Mobile Devices Support @begin -->
+  <meta content="application/xhtml+xml;charset=UTF-8" http-equiv="Content-Type">
+  <!-- Mobile Devices Support @end -->
+  <link href="../css/index.css" rel="stylesheet" />
+  <link href="../css/common.css" rel="stylesheet" />
+  <link href="../css/swiper.min.css" rel="stylesheet" />
+  <script src="../script/jquery-1.9.1.min.js"></script>
+  <script src="../script/main.js"></script>
+  <script src="../script/jquery.rotate.min.js"></script>
+  <script src="../script/swiper.min.js"></script>
+  <script src="../script/api.js"></script>
+  <script src="../script/settings.js"></script>
+  <script src="../script/vue.js"></script>
+  <script src="../script/axios.js"></script>
+  <script src="../script/rpc.js"></script>
+</head>
+<body>
+<div class="main" id="app">
+  <!--头部-->
+  <div class="header" id="bktop">
+    <div class="logo"><a href=""><img :src="site_config.logo" /></a></div>
+    <div class="banner">
+        <div class="close"><img id="img1" src="../image/banner01.gif" /></div>
+        <div class="open hide"><img id="img2" src="../image/banner02.gif" /></div>
+        <ul class="xla">
+            <li :key="key" v-for="nav,key in nav_list">
+              <a class="dianj dj1" :href="nav.link"><font>{{nav.name}}</font><img id="ig1" src="../image/xiala.gif" /></a>
+              <div class="zilan" :key="key" v-for="son,key in nav.children_list">
+                <a :href="son.link">{{son.name}}</a>
+              </div>
+            </li>
+         </ul>
+    </div>
+    <div class="clearBoth"></div>
+  </div>
+  <!--产品信息-->
+  <div class="newsban"><a style="color:#ccc" href="">首页</a> > <a style="color:#ccc" href="">{{goods_spu.category_name}}</a> > {{goods_spu.title}} </div>
+  <div id="main">
+    <div class="home-device">
+      <a class="arrow-left" href="#"></a>
+      <a class="arrow-right" href="#"></a>
+      <div class="swiper-main" style="height:200px;">
+        <div class="swiper-container swiper1">
+          <div class="swiper-wrapper">
+            <div v-for="image in goods_sku_image" class="swiper-slide"><img :src="image.image_url" width="100%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="dian"><div class="pagination pagination1"></div></div>
+  </div>
+  <div class="newbt2">{{current_sku_goods.title}} <span class="goods_price">￥{{current_sku_goods.sale_price}}</span></div>
+  <ul class="sku_list white">
+    <li @click="sku_id=goods.id" :class="sku_id===goods.id?'on':''" v-for="goods in goods_sku"><span>{{goods.title}}</span></li>
+  </ul>
+  <div class="about">
+    <div class="content2">
+      <!-- start -->
+      <div class="page-btn">
+        <span class="swiper-pagination-active">商品详情</span>
+        <span>商品参数</span>
+        <span>同类热门</span>
+      </div>
+      <div class="swiper-container swiper2">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide product-content">
+            <p class="image-list-title"><span>商品描述</span></p>
+            <div class="product-desc white">
+              {{goods_spu.descript}}
+            </div>
+            <p class="image-list-title"><span>穿着效果</span></p>
+            <div class="product-desc white">
+              {{goods_spu.effect}}
+            </div>
+          </div>
+          <div class="swiper-slide product-param">
+            <table class="parameter-table">
+              <tr v-for="value,key in goods_sku_attr">
+                <td>{{key}}: {{value}}</td>
+              </tr>
+            </table>
+          </div>
+          <div class="swiper-slide">
+            <div class="case_list">
+              <div class="case_list_body case_list_body2 case_list_body3">
+                <ul>
+                  <li :class="key%2==0?'yyu':'casela'" v-for="goods,key in hot_goods">
+                  <a href="">
+                    <div class="case_list_body_pic">
+                      <img :src="goods.image_url">
+                    </div>
+                  </a>
+                  <div class="case_list_info">
+                    <p class="cast_list_tit"><a href="">{{goods.title}}</a></p>
+                  </div>
+                  </li>
+
+                  <div class="clearBoth"></div>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--底部-->
+  <div class="bottom">
+      <div class="bottom-top">
+          <div class="linker">
+              <div class="liuy">
+                  <a href="">
+                      <div class="tubiao"><img src="../image/liuy.gif" /></div>
+                      <div class="wenzi">在线留言</div>
+                      <div class="clearBoth"></div>
+                  </a>
+              </div>
+              <div class="clearBoth"></div>
+          </div>
+      </div>
+      <div class="bottom-bot">{{site_config.copyright}}</div>
+  </div>
+</div>
+<script>
+  apiready = function(){
+
+    var vm = new Vue({
+      el:"#app",
+      data:{
+        spu_id:0,
+        site_config: {},
+        nav_list: [],
+        goods_spu:{},
+        hot_goods:[],
+        goods_sku:[],
+        current_sku_goods:{}, // 当前显示的sku商品
+        sku_id: 0,
+        goods_sku_image:[],
+        goods_sku_attr:{},
+      },
+      watch:{
+        "sku_id": function(){
+          for(let key in this.goods_sku){
+            if(this.goods_sku[key].id == this.sku_id){
+                this.current_sku_goods = this.goods_sku[key];
+            }
+          }
+          this.get_goods_sku_image();
+          this.get_goods_sku_attr();
+        }
+      },
+      created(){
+        this.spu_id = api.pageParam.id;
+        this.get_site_config();
+        this.get_nav_list();
+        this.get_goods_spu();
+        this.get_goods_sku();
+      },
+      filters:{
+        format(date_str){
+          date_obj = new Date(date_str);
+          let year = date_obj.getFullYear();
+          let month = date_obj.getMonth()+1;
+          let date = date_obj.getDate();
+          month = month<10?'0'+month:month;
+          date = date<10?'0'+date:date;
+          return `${year}-${month}-${date}`;
+        }
+      },
+      methods:{
+        get_site_config(){
+          // 获取站点配置
+          rpc(settings.API,"Home.site_config",{},result=>{
+            this.site_config = result;
+          });
+        },
+        get_nav_list(){
+          // 导航菜单
+          rpc(settings.API,"Home.nav",{},result=>{
+            this.nav_list = result;
+          });
+        },
+        get_goods_spu(){
+          // 获取商品的spu基本信息
+          rpc(settings.API,"Goods.detail_spu_goods",{
+            "spu_id": this.spu_id
+          },result=>{
+            this.goods_spu = result;
+            // 继续请求同类热门信息
+            this.get_hot_goods();
+          });
+        },
+        get_hot_goods(){
+          // 获取同类热门信息
+          rpc(settings.API,"Goods.detail_hot_goods",{
+            "category": this.goods_spu.category_id
+          },result=>{
+            this.hot_goods = result;
+          });
+        },
+        get_goods_sku(){
+          // 获取当前系列的所有库存商品
+          rpc(settings.API,"Goods.detail_sku_goods",{
+            "spu_id": this.spu_id
+          },result=>{
+            this.goods_sku = result;
+            // 默认第一个商品为当前显示的sku商品信息
+            this.sku_id = this.goods_sku[0].id;
+          });
+        },
+        get_goods_sku_image(){
+          // 获取当前sku商品的图片
+          rpc(settings.API,"Goods.detail_sku_goods_image",{
+            "sku_id": this.sku_id
+          },result=>{
+            this.goods_sku_image = result;
+            // 商品图片
+            swiper = new Swiper('.swiper1', {
+              pagination : '.pagination1',
+              loop: true,
+              paginationClickable: true,
+              autoplay : 5000,
+              grabCursor: true,
+              autoHeight: true,
+            });
+          });
+        },
+        get_goods_sku_attr(){
+          // 获取当前sku商品的属性
+          rpc(settings.API,"Goods.detail_sku_goods_attr",{
+            "sku_id": this.sku_id
+          },result=>{
+            this.goods_sku_attr = result;
+          });
+        }
+      }
+    });
+
+      // 商品详情
+      var swiper2 = new Swiper('.swiper2', {
+        autoHeight: true,
+        onSlideChangeStart: function(swiper){
+          $('.page-btn span').eq(swiper.activeIndex).addClass('swiper-pagination-active').siblings().removeClass('swiper-pagination-active');
+        }
+      });
+
+      // 按钮设置
+      $('.page-btn span').click(function(){
+        $(this).addClass('swiper-pagination-active').siblings().removeClass('swiper-pagination-active');
+        swiper2.slideTo( $(this).index(), 500, false);
+      });
+
+
+  }
+
+
+</script>
+</body>
+</html>

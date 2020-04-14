@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>蘑菇街</title>
+    <meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+    <!-- Mobile Devices Support @begin -->
+    <meta content="application/xhtml+xml;charset=UTF-8" http-equiv="Content-Type">
+    <meta content="no-cache,must-revalidate" http-equiv="Cache-Control">
+    <meta content="no-cache" http-equiv="pragma">
+    <meta content="0" http-equiv="expires">
+    <meta content="telephone=no, address=no" name="format-detection">
+    <!-- Mobile Devices Support @end -->
+    <link href="../css/index.css" rel="stylesheet" />
+    <link href="../css/common.css" rel="stylesheet" />
+    <script src="../script/jquery-1.9.1.min.js"></script>
+    <script src="../script/main.js"></script>
+    <script src="../script/jquery.rotate.min.js"></script>
+    <script src="../script/api.js"></script>
+    <script src="../script/settings.js"></script>
+    <script src="../script/vue.js"></script>
+    <script src="../script/axios.js"></script>
+    <script src="../script/rpc.js"></script>
+    <style>
+    .is_show_more{height: 2000px;overflow: hidden;display: block;}
+    .isnot_need{display: none;}
+    </style>
+</head>
+
+<body>
+<div class="main" id="app">
+    <!--头部-->
+    <div class="header" id="bktop">
+      <div class="logo"><a href=""><img :src="site_config.logo" /></a></div>
+      <div class="banner">
+          <div class="close"><img id="img1" src="../image/banner01.gif" /></div>
+          <div class="open hide"><img id="img2" src="../image/banner02.gif" /></div>
+          <ul class="xla">
+              <li :key="key" v-for="nav,key in nav_list">
+                <a class="dianj dj1" :href="nav.link"><font>{{nav.name}}</font><img id="ig1" src="../image/xiala.gif" /></a>
+                <div class="zilan" :key="key" v-for="son,key in nav.children_list">
+                  <a :href="son.link">{{son.name}}</a>
+                </div>
+              </li>
+           </ul>
+      </div>
+      <div class="clearBoth"></div>
+    </div>
+    <!--关于我们内容-->
+    <div class="newsban"><a style="color:#ccc" href="">首页</a> > <a style="color:#ccc" href="">{{news.category_name}}</a> > {{news.title}}</div>
+    <div class="newbt">{{news.title}}</div>
+    <div class="about">
+        <div class="content2">
+            <table class="what">
+                <tr class="time">
+                    <td class="tub"><img src="../image/time.gif" /></td>
+                    <td class="shij">{{news.created_time|format}}</td>
+                    <td class="clearBoth"></td>
+                </tr>
+                <tr class="time hit">
+                    <td class="tub"><img src="../image/hit.gif" /></td>
+                    <td class="shij">{{news.read_count}}</td>
+                    <td class="clearBoth"></td>
+                </tr>
+                <td class="clearBoth"></td>
+            </table>
+            <!--编辑内容-->
+            <div class='is_show_more white'>
+              {{news.content}}
+            </div>
+            <div class="more"><img src="../image/more.gif" /></div>
+        </div>
+    </div>
+    <!--底部-->
+    <div class="bottom">
+        <div class="bottom-top">
+            <div class="linker">
+                <div class="liuy">
+                    <a href="">
+                        <div class="tubiao"><img src="../image/liuy.gif" /></div>
+                        <div class="wenzi">在线留言</div>
+                        <div class="clearBoth"></div>
+                    </a>
+                </div>
+                <div class="clearBoth"></div>
+            </div>
+        </div>
+        <div class="bottom-bot">{{site_config.copyright}}</div>
+    </div>
+</div>
+<script>
+var vm = new Vue({
+  el:"#app",
+  data:{
+    site_config: {},
+    nav_list: [],
+    news:{},
+  },
+  created(){
+    this.get_site_config();
+    this.get_nav_list();
+    this.get_news();
+  },
+  filters:{
+    format(date_str){
+      date_obj = new Date(date_str);
+      let year = date_obj.getFullYear();
+      let month = date_obj.getMonth()+1;
+      let date = date_obj.getDate();
+      month = month<10?'0'+month:month;
+      date = date<10?'0'+date:date;
+      return `${year}-${month}-${date}`;
+    }
+  },
+  methods:{
+    get_site_config(){
+      // 获取站点配置
+      rpc(settings.API,"Home.site_config",{},result=>{
+        this.site_config = result;
+      });
+    },
+    get_nav_list(){
+      // 导航菜单
+      rpc(settings.API,"Home.nav",{},result=>{
+        this.nav_list = result;
+      });
+    },
+    get_news(){
+      // 获取文章列表
+      let filters = {};
+      filters.id = 3;
+      rpc(settings.API,"News.news",filters,result=>{
+        this.news = result;
+      });
+    },
+  }
+});
+
+$('.more').click(function(){
+    $('.is_show_more').toggleClass('is_show_more');
+    $(this).addClass('isnot_need');
+});
+
+</script>
+</body>
+</html>
